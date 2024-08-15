@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import javax.swing.*;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
 
 public class Fifth_screen extends JFrame {
     JFrame window;
@@ -12,10 +15,16 @@ public class Fifth_screen extends JFrame {
     JScrollPane scp;
     JMenuBar jmb;
     JMenu file, edit, format, theme, fnt, fntsize;
-    JMenuItem ne, ne_win, open, save, save_as, exit, wrap, arl;
-    String filename, fileaddress;
+    JMenuItem ne, ne_win, open, save, save_as, exit, wrap;
+    JMenuItem arl, csmc, tnr;
+    JMenuItem f8, f12, f16, f20, f24, f28, f36, f48, f72, f96;
+    JMenuItem thm1, thm2, thm3, thm4;
+    JMenuItem undo, redo;
+    String filename, fileaddress, font_name;
     JLabel msg;
     boolean word_wrap_on = false;
+    Font arial, comicsansms, timesnewroman, font_details, font_dt;
+    UndoManager um = new UndoManager();
 
     // JLabel jl;
     public Fifth_screen() {
@@ -26,7 +35,12 @@ public class Fifth_screen extends JFrame {
         // jl = new JLabel("I am inside fifth screen");
         // window.add(jl);
         jt = new JTextArea();
-
+        jt.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            @Override
+            public void undoableEditHappened(UndoableEditEvent e) {
+                um.addEdit(e.getEdit());
+            }
+        });
         scp = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scp.setBorder(BorderFactory.createEmptyBorder());
         window.add(scp);
@@ -54,9 +68,10 @@ public class Fifth_screen extends JFrame {
         theme.setIcon(thc);
         jmb.add(theme);
 
-        create_file_menu();
-        create_format_menu();
-
+        create_file_menu(); // function calling
+        create_format_menu(); // function calling
+        create_theme_menu(); // function calling
+        create_edit_menu(); // function calling
         window.setVisible(true);
 
     }
@@ -222,12 +237,228 @@ public class Fifth_screen extends JFrame {
         fnt.setIcon(fi);
         fnt.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         format.add(fnt);
+        arl = new JMenuItem("Arial");
+        arl.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fnt.add(arl);
+
+        arl.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_details = jt.getFont(); // parsing the who font details of the jtextarea jt
+                int a = font_details.getSize(); // pasing the font size of the textfield
+                arial = new Font("Arial", Font.PLAIN, a);
+                jt.setFont(arial);
+            }
+        });
+        csmc = new JMenuItem("Cosmic Sans Ms");
+        csmc.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fnt.add(csmc);
+        csmc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_details = jt.getFont(); // parsing the who font details of the jtextarea jt
+                int a = font_details.getSize(); // pasing the font size of the textfield
+                comicsansms = new Font("Comic Sans Ms", Font.PLAIN, a);
+                jt.setFont(comicsansms);
+            }
+        });
+        tnr = new JMenuItem("Times New Roman");
+        tnr.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fnt.add(tnr);
+        tnr.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_details = jt.getFont(); // parsing the who font details of the jtextarea jt
+                int a = font_details.getSize(); // pasing the font size of the textfield
+                timesnewroman = new Font("Times New Roman", Font.PLAIN, a);
+                jt.setFont(timesnewroman);
+            }
+        });
 
         fntsize = new JMenu("Font Size");
-        ImageIcon fsi= new ImageIcon("button_font_size.png");
+        ImageIcon fsi = new ImageIcon("button_font_size.png");
         fntsize.setIcon(fsi);
         fntsize.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         format.add(fntsize);
+        f8 = new JMenuItem("8");
+        f8.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f8);
+        f8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 8));
+            }
+        });
+        f12 = new JMenuItem("12");
+        f12.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f12);
+        f12.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 12));
+            }
+        });
+        f16 = new JMenuItem("16");
+        f16.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f16);
+        f16.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 16));
+            }
+        });
+        f20 = new JMenuItem("20");
+        f20.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f20);
+        f20.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 20));
+            }
+        });
+        f24 = new JMenuItem("24");
+        f24.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f24);
+        f24.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 24));
+            }
+        });
+        f28 = new JMenuItem("28");
+        f28.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f28);
+        f28.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 28));
+            }
+        });
+        f36 = new JMenuItem("36");
+        f36.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f36);
+        f36.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 36));
+            }
+        });
+        f48 = new JMenuItem("48");
+        f48.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f48);
+        f48.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 48));
+            }
+        });
+        f72 = new JMenuItem("72");
+        f72.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f72);
+        f72.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 72));
+            }
+        });
+        f96 = new JMenuItem("96");
+        f96.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        fntsize.add(f96);
+        f96.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                font_dt = jt.getFont();
+                jt.setFont(new Font(font_dt.getName(), font_dt.getStyle(), 96));
+            }
+        });
+
+    }
+
+    public void create_theme_menu() {
+        thm1 = new JMenuItem("White");
+        thm1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        theme.add(thm1);
+        thm1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.getContentPane().setBackground(Color.white);
+                jt.setBackground(Color.white);
+                jt.setForeground(Color.black);
+                jmb.setBackground(Color.white); // makes the background of the menubar of the above white
+            }
+        });
+        thm2 = new JMenuItem("Black");
+        thm2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        theme.add(thm2);
+        thm2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.getContentPane().setBackground(Color.black);
+                jt.setBackground(Color.black);
+                jt.setForeground(Color.white);
+                jmb.setBackground(Color.black); // makes the background of the menubar of the above black
+            }
+        });
+        thm3 = new JMenuItem("Dark Gray");
+        thm3.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        theme.add(thm3);
+        thm3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.getContentPane().setBackground(Color.darkGray);
+                jt.setBackground(Color.darkGray);
+                jt.setForeground(Color.white);
+                jmb.setBackground(Color.darkGray); // makes the background of the menubar of the above gray
+            }
+        });
+        thm4 = new JMenuItem("Golden Brown");
+        thm4.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        theme.add(thm4);
+        thm4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color c = new Color(186, 178, 8);
+                window.getContentPane().setBackground(c);
+                jt.setBackground(c);
+                jt.setForeground(Color.black);
+                jmb.setBackground(c);
+            }
+        });
+
+    }
+
+    public void create_edit_menu() {
+        undo = new JMenuItem("Undo");
+        undo.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        ImageIcon un = new ImageIcon("button_undo.png");
+        undo.setIcon(un);
+        edit.add(undo);
+        undo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                um.undo();
+            }
+        });
+        redo = new JMenuItem("Redo");
+        redo.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        ImageIcon re = new ImageIcon("button_redo.png");
+        redo.setIcon(re);
+        edit.add(redo);
+        redo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                um.redo();
+            }
+        });
     }
 
     public static void main(String[] args) {
